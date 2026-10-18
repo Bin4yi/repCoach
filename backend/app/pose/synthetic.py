@@ -57,6 +57,8 @@ def _per_rep(value, n_reps, default):
 
 def _frame_values(per_rep, rep_id, idle_value):
     arr = np.array(per_rep, dtype=float)
+    if arr.size == 0:
+        return np.full(len(rep_id), idle_value)
     return np.where(rep_id >= 0, arr[np.clip(rep_id, 0, len(arr) - 1)], idle_value)
 
 
@@ -89,10 +91,10 @@ def _both_sides(frame: dict, joints: dict[str, np.ndarray], right_joints: dict[s
 # --------------------------------------------------------------------------- squat
 
 def gen_squat(n_reps=5, fps=30.0, min_knee=80.0, lean=35.0, shin_lean=25.0, down_s=2.0, up_s=1.0,
-              pause_s=0.3, min_knee_per_rep=None, lean_per_rep=None, down_per_rep=None,
+              pause_s=0.3, min_knee_per_rep=None, lean_per_rep=None, down_per_rep=None, up_per_rep=None,
               femur_ratio=1.0, noise=0.0, seed=0, facing=1.0, left_extra_deg=0.0) -> PoseSequence:
     """Side-view squat. min_knee = knee angle at the bottom (smaller = deeper)."""
-    u, rid = rep_profile(n_reps, fps, down_s, up_s, pause_s, down_per_rep=down_per_rep)
+    u, rid = rep_profile(n_reps, fps, down_s, up_s, pause_s, down_per_rep=down_per_rep, up_per_rep=up_per_rep)
     mk = _frame_values(_per_rep(min_knee_per_rep, n_reps, min_knee), rid, 180.0)
     ln = _frame_values(_per_rep(lean_per_rep, n_reps, lean), rid, 0.0)
     thigh = THIGH * femur_ratio
