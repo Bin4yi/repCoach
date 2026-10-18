@@ -41,13 +41,7 @@ def create_app(settings: Settings | None = None, *, db=None, llm="auto", analyze
         app.state.db = db
         if app.state.db is None:
             app.state.client, app.state.db = await init_db(settings)
-        if llm != "auto":
-            app.state.llm = llm
-        elif settings.llm_provider == "openai":  # DEMO SHIM (revert after the promo video)
-            from .llm.openai_client import OpenAIClient
-            app.state.llm = OpenAIClient(settings.openai_api_key, settings.openai_model, settings.openai_base_url)
-        else:
-            app.state.llm = OllamaClient(settings.ollama_url, settings.ollama_model)
+        app.state.llm = OllamaClient(settings.ollama_url, settings.ollama_model) if llm == "auto" else llm
         if llm == "auto":
             await app.state.llm.use_best_model()  # fall back to the newest installed Gemma if needed
         if analyze_video is None:
