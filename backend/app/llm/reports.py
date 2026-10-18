@@ -29,6 +29,9 @@ CONSERVATIVE_SENTENCE = "Your coach will check this with you before any change i
 BANNED = re.compile(r"\b(calorie|calories|kcal|diet|dieting|macros?|protein intake|weigh(?:t)? loss|lose weight|"
                     r"fasting|keto|carbs?)\b", re.I)
 NUMBER_RE = re.compile(r"\d+(?:\.\d+)?")
+# Plain-language reading guide sent with every payload (no digits, so it never trips the number check).
+READING_GUIDE = ("depth values are joint angles at the bottom of a rep: a LOWER angle means a DEEPER rep, which is "
+                 "usually better. A negative depth change means the client went deeper. Form score is out of one hundred.")
 
 
 class LLM(Protocol):
@@ -198,7 +201,7 @@ def _validate_feedback(fb: SessionFeedback, payload: dict) -> list[str]:
 
 async def generate_feedback(llm: LLM | None, profile: dict, inputs: dict, judgement: dict, set_summary: dict) -> dict:
     payload = {"client": profile_for_llm(profile), "video_inputs": _inputs_for_llm(inputs),
-               "judgement": judgement, "set_summary": set_summary}
+               "judgement": judgement, "set_summary": set_summary, "how_to_read": READING_GUIDE}
     fb, source, warnings = await _generate(
         llm, prompts.SYSTEM_PROMPT, prompts.feedback_prompt(payload), SessionFeedback,
         lambda o: _validate_feedback(o, payload), lambda: fallback_feedback(payload))
@@ -230,7 +233,7 @@ def fallback_progress(payload: dict) -> ProgressSummary:
 
 
 async def generate_progress(llm: LLM | None, profile: dict, history: dict, safety: dict) -> dict:
-    payload = {"client": profile_for_llm(profile), "history": history, "safety": safety}
+    payload = {"client": profile_for_llm(profile), "history": history, "safety": safety, "how_to_read": READING_GUIDE}
 
     def validate(o: ProgressSummary) -> list[str]:
         problems = []

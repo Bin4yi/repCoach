@@ -35,7 +35,7 @@ export default function PlanEditor({ plan, onDone }: { plan: PlanDoc; onDone: ()
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2 text-sm">
         <span className={`chip ${approved ? "chip-good" : "chip-amber"}`}>{approved ? "Approved" : "Draft: needs your review"}</span>
-        <span className="hint">Week of {longDate(plan.week_start)} · written by {plan.source === "gemma" ? "Gemma" : "a template"}</span>
+        <span className="hint">Week of {longDate(plan.week_start)} · written by {plan.source === "gemma" ? "the AI model" : "a template"}</span>
         {plan.conservative_mode && <span className="chip chip-red">Careful mode: no load increases</span>}
       </div>
       {plan.warnings.length > 0 && <ul className="list-disc pl-5 text-xs text-muted">{plan.warnings.map((w, i) => <li key={i}>{w}</li>)}</ul>}

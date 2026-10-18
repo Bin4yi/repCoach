@@ -150,7 +150,7 @@ function Review({ s, voiceEnabled, onChanged }: { s: SessionDetail; voiceEnabled
         </div>
 
         <div className="space-y-4">
-          <Section title="AI draft for the client" right={fb && <span className="chip chip-info">{fb.source === "gemma" ? `Gemma${fb.model ? ` · ${fb.model}` : ""}` : "Template (AI unavailable or rejected)"}</span>}>
+          <Section title="AI draft for the client" right={fb && <span className="chip chip-info">{fb.source === "gemma" ? aiLabel(fb.model) : fb.source.startsWith("demo") ? "Demo template" : "Template (AI unavailable or rejected)"}</span>}>
             {fb?.warnings && fb.warnings.length > 0 && <ul className="mb-2 list-disc pl-5 text-xs text-muted">{fb.warnings.map((w, i) => <li key={i}>{w}</li>)}</ul>}
             {fb && (
               <div className="mb-3 space-y-2 text-sm">
@@ -204,6 +204,12 @@ function Review({ s, voiceEnabled, onChanged }: { s: SessionDetail; voiceEnabled
       </Section>
     </div>
   );
+}
+
+/** Name the model that actually wrote the draft (Gemma in production; a stand-in may be used for demos). */
+function aiLabel(model: string | null): string {
+  if (!model) return "AI draft";
+  return model.toLowerCase().startsWith("gemma") ? `Gemma · ${model}` : `AI draft · ${model}`;
 }
 
 function fmt(v: number | null, unit = ""): string {
