@@ -56,7 +56,7 @@ DEMO_CLIENTS = [
         "weight": (77.0, 75.0), "exercises": ["squat", "bicep_curl", "squat"],
         "squat_depth": (125, 104), "loads": {"squat": (0, 0), "pushup": (0, 0), "bicep_curl": (2, 5)},
         "coach_notes": "DEMO. Physio cleared light squats to a box. Always ask about the left knee first.",
-        "pain_days_ago": 9,
+        "pain_from_end": 3,   # pain reported in the 3rd newest session, so the coach dashboard shows a red warning
     },
 ]
 
@@ -140,7 +140,7 @@ async def seed(db, reset: bool = False, seed_value: int = 7) -> dict[str, str]:
                 continue
             l0, l1 = spec["loads"][exercise]
             load = round(lerp(l0, l1, t) / 2.5) * 2.5 if l1 else 0.0
-            pain = bool(spec.get("pain_days_ago") and (today - d).days == spec["pain_days_ago"] and exercise == "squat")
+            pain = spec.get("pain_from_end") == len(days) - i
             inputs = {"exercise": exercise, "camera_view": "side", "load_kg": load, "target_reps": 8,
                       "sets_done_today": rng.choice([2, 3, 3, 4]), "rpe": rng.choice([6, 7, 7, 8, 9]),
                       "pain_during_set": pain, "pain_text": "twinge in left knee" if pain else None,

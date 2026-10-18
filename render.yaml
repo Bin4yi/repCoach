@@ -1,0 +1,40 @@
+# Render blueprint: backend (Python) + frontend (Node). Ollama is NOT hosted here:
+# run it on the coach's machine or a GPU box and point OLLAMA_URL at it.
+services:
+  - type: web
+    name: repcheck-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python scripts/download_model.py
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: MONGODB_URI          # MongoDB Atlas connection string
+        sync: false
+      - key: MONGODB_DB
+        value: repcheck
+      - key: OLLAMA_URL           # e.g. https://my-gpu-box.example.com (reachable from Render)
+        sync: false
+      - key: OLLAMA_MODEL
+        value: gemma3:4b
+      - key: COACH_PASSWORD
+        generateValue: true
+      - key: FRONTEND_URL         # public URL of repcheck-web
+        sync: false
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: MAX_UPLOAD_MB
+        value: "100"
+      - key: ELEVENLABS_API_KEY   # optional: enables voice notes
+        sync: false
+  - type: web
+    name: repcheck-web
+    runtime: node
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: BACKEND_URL          # public URL of repcheck-api; needed at BUILD time (rewrites are baked in)
+        sync: false

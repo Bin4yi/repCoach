@@ -39,8 +39,8 @@ async def client_home(client: dict = Depends(client_by_token), db=Depends(get_db
                          "approved_at": a.get("approved_at")})
     plan = await db.plans.find_one({"client_id": client["_id"], "status": "approved"}, sort=[("approved_at", -1)])
     weight = await db.weight_log.find({"client_id": client["_id"]}).sort("date", 1).to_list(500)
-    pending = await db.sessions.count_documents({"client_id": client["_id"],
-                                                 "status": {"$in": ["queued", "processing", "ready_for_review"]}})
+    pending = await db.sessions.count_documents({"client_id": client["_id"], "status": "ready_for_review"})
+    processing = await db.sessions.count_documents({"client_id": client["_id"], "status": {"$in": ["queued", "processing"]}})
     reshoot = await db.sessions.find_one({"client_id": client["_id"], "status": "needs_reshoot"}, sort=[("created_at", -1)])
     latest = await db.sessions.find_one({"client_id": client["_id"]}, sort=[("created_at", -1)])
     return serialize({
@@ -49,7 +49,7 @@ async def client_home(client: dict = Depends(client_by_token), db=Depends(get_db
         "reports": reports_, "plan": plan["approved"] if plan else None,
         "plan_week_start": plan["week_start"] if plan else None,
         "weight_log": [{"date": w["date"], "kg": w["kg"]} for w in weight],
-        "pending_count": pending,
+        "pending_count": pending, "processing_count": processing,
         "reshoot_reason": (reshoot.get("quality") or {}).get("reason") if reshoot and latest and latest["_id"] == reshoot["_id"] else None,
     })
 
