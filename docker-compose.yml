@@ -1,0 +1,53 @@
+# Local dev stack: backend + frontend + mongo + ollama (pulls the Gemma model on start).
+services:
+  mongo:
+    image: mongo:7
+    ports: ["27017:27017"]
+    volumes: [mongo_data:/data/db]
+
+  ollama:
+    image: ollama/ollama:latest
+    ports: ["11434:11434"]
+    volumes: [ollama_data:/root/.ollama]
+    entrypoint: ["/bin/sh", "-c"]
+    # Start the server, wait for it, then pull the model once.
+    command:
+      - |
+        ollama serve &
+        sleep 5
+        ollama pull $${OLLAMA_MODEL:-gemma3:4b}
+        wait
+    # Uncomment for NVIDIA GPUs:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices: [{ driver: nvidia, count: all, capabilities: [gpu] }]
+
+  backend:
+    build: ./backend
+    environment:
+      MONGODB_URI: mongodb://mongo:27017
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-gemma3:4b}
+      COACH_PASSWORD: ${COACH_PASSWORD:-change-me}
+      FRONTEND_URL: http://localhost:3000
+      ELEVENLABS_API_KEY: ${ELEVENLABS_API_KEY:-}
+      DEMO_SEED_ON_START: ${DEMO_SEED_ON_START:-false}
+    ports: ["8000:8000"]
+    depends_on: [mongo, ollama]
+    volumes: [uploads:/app/uploads]
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        BACKEND_URL: http://backend:8000
+    environment:
+      BACKEND_URL: http://backend:8000
+    ports: ["3000:3000"]
+    depends_on: [backend]
+
+volumes:
+  mongo_data:
+  ollama_data:
+  uploads:

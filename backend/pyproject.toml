@@ -1,0 +1,31 @@
+[project]
+name = "repcheck-backend"
+version = "0.1.0"
+description = "RepCheck: pose metrics + local Gemma coaching drafts for online personal trainers"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.110",
+  "uvicorn[standard]>=0.27",
+  "pydantic>=2.5",
+  "pydantic-settings>=2.2",
+  "motor>=3.4",
+  "httpx>=0.27",
+  "python-multipart>=0.0.9",
+  "mediapipe>=0.10.14",
+  "opencv-python-headless>=4.9",
+  "numpy>=1.26",
+  "scipy>=1.12",
+  "tzdata",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "mongomock-motor>=0.0.29"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["."]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
