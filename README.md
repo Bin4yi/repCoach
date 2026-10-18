@@ -2,6 +2,8 @@
 
 ![RepCheck: every rep measured, your coach still decides](media/banner.png)
 
+▶️ **[Watch the 2-minute demo on YouTube](https://youtu.be/XPwhwYeGhm8)**
+
 AI helper for online personal trainers. Clients film a set; **MediaPipe** finds body points, **Python code** measures and judges form, and **Gemma** (open-weight, run locally with **Ollama**) turns only the numbers into feedback, a progress summary and a next-week plan. The **coach** reviews, edits and approves everything. The AI only drafts.
 
 
