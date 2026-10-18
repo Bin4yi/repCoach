@@ -19,3 +19,6 @@ tsconfig.tsbuildinfo
 # Third-party clips for local pipeline testing / promo footage (not ours to redistribute)
 test-footage/
 promo-footage/
+
+# Personal submission drafts (kept local)
+docs/DEV_POST.md
