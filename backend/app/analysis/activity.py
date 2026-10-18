@@ -17,7 +17,7 @@ WINDOW_DAYS = 365
 FORM_BONUS = 5          # extra training points for a set with form score >= FORM_BONUS_MIN
 FORM_BONUS_MIN = 80
 BEST_DEPTH_MIN_GAIN_DEG = 2.0
-EXERCISE_COLORS = {"squat": "#3b82f6", "pushup": "#f59e0b", "bicep_curl": "#ec4899"}
+EXERCISE_COLORS = {"squat": "#1d1d1f", "pushup": "#ff9500", "bicep_curl": "#34c759"}
 COUNTED_STATUSES = {"ready_for_review", "approved"}
 
 

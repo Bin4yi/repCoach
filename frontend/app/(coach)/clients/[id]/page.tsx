@@ -95,7 +95,7 @@ export default function ClientPage() {
             </Section>
             <div className="grid gap-4 md:grid-cols-2">
               <Section title="Relative strength (load ÷ body weight)"><TrendChart data={relData} lines={lines} /></Section>
-              <Section title="Body weight (coach only)"><TrendChart data={weight} lines={[{ key: "kg", label: "kg", color: "#6366f1" }]} /></Section>
+              <Section title="Body weight (coach only)"><TrendChart data={weight} lines={[{ key: "kg", label: "kg", color: "#8e8e93" }]} /></Section>
             </div>
 
             {exercises.length > 0 && (
@@ -111,7 +111,7 @@ export default function ClientPage() {
                   <div><div className="mb-1 text-xs font-semibold text-muted">Average depth angle (lower = deeper)</div>
                     <TrendChart data={depthData} lines={[{ key: "depth", label: "Depth °", color: "var(--brand)" }]} height={170} /></div>
                   <div><div className="mb-1 text-xs font-semibold text-muted">Seconds per phase</div>
-                    <TrendChart data={depthData} lines={[{ key: "down", label: "Down (s)", color: "#f59e0b" }, { key: "up", label: "Up (s)", color: "#3b82f6" }]} height={170} /></div>
+                    <TrendChart data={depthData} lines={[{ key: "down", label: "Down (s)", color: "#ff9500" }, { key: "up", label: "Up (s)", color: "#1d1d1f" }]} height={170} /></div>
                 </div>
               </Section>
             )}

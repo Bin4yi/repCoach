@@ -101,7 +101,7 @@ export default function ClientHomePage() {
       )}
       {weight.length >= 2 && (
         <Section title="My weight (only you and your coach see this)">
-          <TrendChart data={weight} lines={[{ key: "kg", label: "kg", color: "#6366f1" }]} />
+          <TrendChart data={weight} lines={[{ key: "kg", label: "kg", color: "#8e8e93" }]} />
         </Section>
       )}
 

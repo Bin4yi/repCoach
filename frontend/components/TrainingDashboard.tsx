@@ -17,8 +17,8 @@ export function ProfileCard({ a }: { a: Activity }) {
     <div className="card flex items-center gap-4 md:flex-col md:items-start">
       <div
         aria-hidden
-        className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full text-2xl font-bold text-white ring-4 ring-white/40 md:h-32 md:w-32 md:text-4xl"
-        style={{ background: "linear-gradient(135deg, var(--brand), var(--brand-2))", boxShadow: "0 12px 30px -10px color-mix(in srgb, var(--brand-2) 70%, transparent)" }}
+        className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full text-2xl font-bold text-white ring-4 ring-white shadow-md md:h-32 md:w-32 md:text-4xl"
+        style={{ background: "var(--ink)" }}
       >
         {initials(p.name)}
       </div>

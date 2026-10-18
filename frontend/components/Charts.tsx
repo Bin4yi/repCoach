@@ -17,12 +17,12 @@ import type { RepMetrics } from "@/lib/types";
 const AXIS = { fontSize: 11, fill: "var(--muted)" };
 const GRID = "var(--line)";
 const TIP = {
-  background: "var(--glass-strong)",
-  border: "1px solid var(--glass-border)",
+  background: "rgba(255,255,255,0.92)",
+  border: "1px solid var(--line)",
   borderRadius: 12,
   color: "var(--ink)",
   fontSize: 12,
-  boxShadow: "var(--glass-shadow)",
+  boxShadow: "var(--shadow)",
   backdropFilter: "blur(14px)",
 };
 

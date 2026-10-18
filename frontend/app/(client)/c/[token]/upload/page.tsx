@@ -223,7 +223,7 @@ export default function UploadPage() {
         {uploading && (
           <div className="card" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
             <div className="mb-1 text-sm font-semibold">Uploading… {pct}%</div>
-            <div className="h-2.5 overflow-hidden rounded-full bg-line"><div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: "linear-gradient(90deg, var(--brand), var(--brand-2))" }} /></div>
+            <div className="h-2.5 overflow-hidden rounded-full bg-line"><div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: "var(--ink)" }} /></div>
           </div>
         )}
         <button className="btn w-full" disabled={uploading || !file}>{uploading ? "Uploading…" : "Send to my coach"}</button>

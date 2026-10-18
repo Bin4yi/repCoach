@@ -23,7 +23,7 @@ export function ClientNav({ token, current }: { token: string; current?: "home" 
               className={`flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl px-2 py-2 text-center transition sm:px-3 ${
                 on ? "text-white shadow-md" : "text-muted hover:text-ink"
               }`}
-              style={on ? { background: "linear-gradient(135deg, var(--brand), var(--brand-2))" } : undefined}
+              style={on ? { background: "var(--ink)" } : undefined}
             >
               <span aria-hidden className="hidden min-[400px]:inline">{i.icon}</span>
               {i.label}

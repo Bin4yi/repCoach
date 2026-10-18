@@ -6,9 +6,9 @@ export const EXERCISE_LABEL: Record<string, string> = {
   bicep_curl: "Bicep curl",
 };
 export const EXERCISE_COLOR: Record<string, string> = {
-  squat: "#3b82f6",
-  pushup: "#f59e0b",
-  bicep_curl: "#ec4899",
+  squat: "#1d1d1f",
+  pushup: "#ff9500",
+  bicep_curl: "#34c759",
 };
 
 export const GOAL_LABEL: Record<Goal, string> = {

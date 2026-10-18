@@ -8,8 +8,7 @@ export function Logo({ size = 32, withText = true, sub }: { size?: number; withT
         style={{
           width: size,
           height: size,
-          background: "linear-gradient(135deg, var(--brand), var(--brand-2))",
-          boxShadow: "0 6px 18px -6px color-mix(in srgb, var(--brand-2) 70%, transparent)",
+          background: "var(--ink)",
         }}
       >
         <svg viewBox="0 0 32 32" width={size * 0.62} height={size * 0.62}>
@@ -18,7 +17,7 @@ export function Logo({ size = 32, withText = true, sub }: { size?: number; withT
       </span>
       {withText && (
         <span className="text-lg font-bold tracking-tight">
-          Rep<span className="text-gradient">Check</span>
+          Rep<span className="text-subtle">Check</span>
           {sub && <span className="ml-1.5 text-xs font-semibold uppercase tracking-wider text-muted">{sub}</span>}
         </span>
       )}

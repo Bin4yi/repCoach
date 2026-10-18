@@ -15,11 +15,11 @@ export default function Home() {
 
       <section className="mt-10 grid items-center gap-8 md:grid-cols-[1.1fr_1fr]">
         <div>
-          <span className="chip chip-info">Open-weight AI · coach in control</span>
+          <span className="chip chip-info">Open-weight AI · Coach in control</span>
           <h1 className="mt-4 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
             Every rep measured.
             <br />
-            <span className="text-gradient">Every message approved.</span>
+            <span className="text-subtle">Every message approved.</span>
           </h1>
           <p className="mt-4 max-w-lg text-lg text-muted">
             Film a set on your phone. RepCheck measures your form and drafts feedback. Your coach reviews it before you see it.
@@ -50,7 +50,7 @@ export default function Home() {
                 className="flex-1 rounded-t-md"
                 style={{
                   height: `${h}%`,
-                  background: i === 4 || i === 5 ? "var(--bad)" : "linear-gradient(180deg, var(--brand-2), var(--brand))",
+                  background: i === 4 || i === 5 ? "var(--bad)" : "var(--ink)",
                   opacity: 0.85,
                 }}
               />
