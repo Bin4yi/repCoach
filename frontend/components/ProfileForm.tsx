@@ -8,7 +8,7 @@ const EQUIPMENT: Equipment[] = ["bodyweight", "dumbbells", "barbell", "machines"
 
 export function ConsentCard({ accepted, onChange }: { accepted: boolean; onChange: (v: boolean) => void }) {
   return (
-    <div className="card border-brand/40 bg-brand-soft">
+    <div className="card !border-brand/40">
       <h2 className="font-semibold">Before you start: your privacy</h2>
       <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
         <li>Your video is checked by software, then it is deleted.</li>
@@ -164,7 +164,7 @@ export default function ProfileForm({
             {EQUIPMENT.map((eq) => {
               const on = f.equipment.includes(eq);
               return (
-                <label key={eq} className={`chip cursor-pointer border px-3 py-2 text-sm ${on ? "chip-good border-brand" : "border-line"}`}>
+                <label key={eq} className={`tile cursor-pointer px-3 py-2 text-sm font-semibold capitalize ${on ? "tile-on text-brand" : "text-muted"}`}>
                   <input
                     type="checkbox"
                     className="sr-only"

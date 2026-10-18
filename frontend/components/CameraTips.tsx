@@ -3,8 +3,8 @@ export default function CameraTips({ view, exercise }: { view: "side" | "front";
   return (
     <div className="card !p-3">
       <h3 className="text-sm font-semibold">How to film</h3>
-      <div className="mt-2 flex items-center gap-4">
-        <svg viewBox="0 0 220 120" className="h-28 w-48 shrink-0" role="img" aria-label={`Phone ${view} of the person, full body in view`}>
+      <div className="mt-2 flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+        <svg viewBox="0 0 220 120" className="h-28 w-full max-w-[14rem] shrink-0" role="img" aria-label={`Phone ${view} of the person, full body in view`}>
           <rect x="1" y="1" width="218" height="118" rx="10" fill="none" stroke="currentColor" strokeOpacity=".25" />
           {view === "side" ? (
             <g stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none">

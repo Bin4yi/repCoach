@@ -36,7 +36,7 @@ export default function ClientHomePage() {
   return (
     <main className="mx-auto max-w-2xl space-y-4 px-4 py-6">
       <ClientNav token={token} />
-      <h1 className="text-2xl font-bold">Hi {data.name.split(" ")[0]} 👋</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight">Hi <span className="text-gradient">{data.name.split(" ")[0].replace(/\s*\(demo\)/i, "")}</span> 👋</h1>
 
       {data.reshoot_reason && (
         <div role="alert" className="card border-warn/40 bg-warn-soft">
@@ -80,7 +80,7 @@ export default function ClientHomePage() {
         ) : (
           <ul className="space-y-3">
             {data.reports.map((r) => (
-              <li key={r.id} className="rounded-xl border border-line p-3">
+              <li key={r.id} className="tile p-3">
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="font-semibold">{EXERCISE_LABEL[r.exercise]} · {r.rep_count} reps</span>
                   <span className="hint">{longDate(r.created_at)}</span>

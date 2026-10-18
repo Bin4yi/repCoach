@@ -138,13 +138,13 @@ export default function UploadPage() {
   return (
     <main className="mx-auto max-w-xl space-y-4 px-4 py-6">
       <ClientNav token={token} current="upload" />
-      <h1 className="text-2xl font-bold">Upload a set</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight">Upload a <span className="text-gradient">set</span></h1>
       <form onSubmit={submit} className="space-y-4">
         <fieldset className="card">
-          <legend className="label px-1">1. Which exercise?</legend>
-          <div className="grid grid-cols-3 gap-2">
+          <legend className="label float-left mb-2 w-full">1. Which exercise?</legend>
+          <div className="clear-both grid grid-cols-3 gap-2">
             {EXERCISES.map((x) => (
-              <label key={x.key} className={`cursor-pointer rounded-xl border p-3 text-center ${exercise === x.key ? "border-brand bg-brand-soft" : "border-line"}`}>
+              <label key={x.key} className={`tile cursor-pointer p-3 text-center ${exercise === x.key ? "tile-on" : ""}`}>
                 <input type="radio" className="sr-only" name="exercise" checked={exercise === x.key} onChange={() => setExercise(x.key)} />
                 <div className="text-2xl" aria-hidden>{x.emoji}</div>
                 <div className="text-sm font-semibold">{EXERCISE_LABEL[x.key]}</div>
@@ -155,10 +155,10 @@ export default function UploadPage() {
         </fieldset>
 
         <fieldset className="card">
-          <legend className="label px-1">2. Camera view</legend>
-          <div className="grid grid-cols-2 gap-2">
+          <legend className="label float-left mb-2 w-full">2. Camera view</legend>
+          <div className="clear-both grid grid-cols-2 gap-2">
             {(["side", "front"] as const).map((v) => (
-              <label key={v} className={`cursor-pointer rounded-xl border p-3 text-center text-sm font-semibold ${view === v ? "border-brand bg-brand-soft" : "border-line"}`}>
+              <label key={v} className={`tile cursor-pointer p-3 text-center text-sm font-semibold ${view === v ? "tile-on" : ""}`}>
                 <input type="radio" className="sr-only" name="view" checked={view === v} onChange={() => setView(v)} />
                 {v === "side" ? "Side view (best)" : "Front view"}
               </label>
@@ -202,7 +202,7 @@ export default function UploadPage() {
             <label className="label" htmlFor="bw">Body weight today (kg, optional)</label>
             <input id="bw" className="field" type="number" inputMode="decimal" min={30} step="0.1" value={bw} onChange={(e) => setBw(e.target.value)} />
           </div>
-          <label className="flex items-start gap-2 rounded-xl border border-line p-3">
+          <label className={`tile flex items-start gap-2 p-3 ${pain ? "!border-bad !bg-bad-soft" : ""}`}>
             <input type="checkbox" className="mt-1 h-5 w-5" checked={pain} onChange={(e) => setPain(e.target.checked)} />
             <span className="text-sm font-medium">I felt pain during this set</span>
           </label>
@@ -223,7 +223,7 @@ export default function UploadPage() {
         {uploading && (
           <div className="card" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
             <div className="mb-1 text-sm font-semibold">Uploading… {pct}%</div>
-            <div className="h-2 overflow-hidden rounded-full bg-line"><div className="h-full bg-brand transition-all" style={{ width: `${pct}%` }} /></div>
+            <div className="h-2.5 overflow-hidden rounded-full bg-line"><div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: "linear-gradient(90deg, var(--brand), var(--brand-2))" }} /></div>
           </div>
         )}
         <button className="btn w-full" disabled={uploading || !file}>{uploading ? "Uploading…" : "Send to my coach"}</button>

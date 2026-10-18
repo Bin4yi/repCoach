@@ -29,7 +29,7 @@ export default function DashboardPage() {
 
   return (
     <CoachShell>
-      <h1 className="mb-4 text-2xl font-bold">Your clients</h1>
+      <h1 className="mb-4 text-3xl font-extrabold tracking-tight">Your <span className="text-gradient">clients</span></h1>
 
       <form onSubmit={add} className="card mb-4 flex flex-wrap items-end gap-2">
         <div className="min-w-[12rem] flex-1">
@@ -40,7 +40,7 @@ export default function DashboardPage() {
         {formError && <p role="alert" className="w-full text-sm text-bad">{formError}</p>}
       </form>
       {created && (
-        <div className="card mb-4 border-brand/40 bg-brand-soft text-sm">
+        <div className="card mb-4 !bg-brand-soft text-sm">
           <p className="font-semibold">Link for {created.name}. Send it to them privately:</p>
           <code className="mt-1 block break-all">{created.link}</code>
           <button className="btn btn-ghost mt-2" onClick={() => navigator.clipboard?.writeText(created.link)}>Copy link</button>
@@ -57,7 +57,7 @@ export default function DashboardPage() {
         <ul className="space-y-2">
           {data.map((c) => (
             <li key={c.id}>
-              <Link href={`/clients/${c.id}`} className="card block transition hover:border-brand">
+              <Link href={`/clients/${c.id}`} className="card block">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="truncate font-semibold">{c.name}</div>

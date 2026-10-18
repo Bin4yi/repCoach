@@ -14,7 +14,7 @@ export function Spinner({ label = "Loading…" }: { label?: string }) {
 
 export function ErrorBox({ message, onRetry }: { message: string; onRetry?: () => void }) {
   return (
-    <div role="alert" className="card border-bad/40 bg-bad-soft text-bad">
+    <div role="alert" className="card !border-bad/40 !bg-bad-soft text-bad">
       <p>{message}</p>
       {onRetry && (
         <button className="btn btn-ghost mt-2" onClick={onRetry}>
@@ -85,7 +85,7 @@ export function Stat({ label, value, sub }: { label: string; value: React.ReactN
   return (
     <div className="card !p-3">
       <div className="text-xs font-medium text-muted">{label}</div>
-      <div className="mt-0.5 text-2xl font-bold tabular-nums">{value}</div>
+      <div className="text-gradient mt-0.5 text-2xl font-extrabold tabular-nums">{value}</div>
       {sub && <div className="hint">{sub}</div>}
     </div>
   );

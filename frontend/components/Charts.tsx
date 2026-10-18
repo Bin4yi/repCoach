@@ -16,7 +16,15 @@ import type { RepMetrics } from "@/lib/types";
 
 const AXIS = { fontSize: 11, fill: "var(--muted)" };
 const GRID = "var(--line)";
-const TIP = { background: "var(--card)", border: "1px solid var(--line)", borderRadius: 8, color: "var(--ink)", fontSize: 12 };
+const TIP = {
+  background: "var(--glass-strong)",
+  border: "1px solid var(--glass-border)",
+  borderRadius: 12,
+  color: "var(--ink)",
+  fontSize: 12,
+  boxShadow: "var(--glass-shadow)",
+  backdropFilter: "blur(14px)",
+};
 
 export interface LineDef {
   key: string;

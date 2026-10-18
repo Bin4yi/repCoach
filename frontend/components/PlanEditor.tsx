@@ -47,7 +47,7 @@ export default function PlanEditor({ plan, onDone }: { plan: PlanDoc; onDone: ()
 
       <div className="space-y-2">
         {draft.sessions.map((s, i) => (
-          <div key={i} className="rounded-xl border border-line p-3">
+          <div key={i} className="tile p-3">
             <div className="mb-2 flex items-center justify-between font-semibold">
               <span>{DAYS[s.day]} · {EXERCISE_LABEL[s.exercise] ?? s.exercise}</span>
               <span className="hint">{s.load_suggestion}</span>

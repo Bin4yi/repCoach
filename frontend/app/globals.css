@@ -1,60 +1,96 @@
 @import "tailwindcss";
 
-/* Calm, low-contrast palette. Tokens first; Tailwind utilities (bg-card, text-muted, ...) read them. */
+/*
+  RepCheck theme: glassmorphism on a soft "aurora" background.
+  Frosted translucent surfaces, a teal -> indigo accent, deep navy dark mode.
+  Tokens first; Tailwind utilities (bg-card, text-muted, border-line, ...) read them.
+*/
 :root {
-  --bg: #f6f8f9;
-  --card: #ffffff;
-  --ink: #17232b;
-  --muted: #5d6c76;
-  --line: #dde4e8;
-  --brand: #0f766e;
+  --bg: #eef3f8;
+  /* aurora blobs behind the glass */
+  --aurora-1: rgba(45, 212, 191, 0.38);
+  --aurora-2: rgba(129, 140, 248, 0.34);
+  --aurora-3: rgba(56, 189, 248, 0.28);
+  --aurora-4: rgba(244, 114, 182, 0.16);
+
+  --glass: rgba(255, 255, 255, 0.58);
+  --glass-strong: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --glass-shadow: 0 10px 40px -12px rgba(30, 41, 89, 0.18), 0 2px 6px -2px rgba(30, 41, 89, 0.06);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --card: var(--glass);
+  --card-solid: #ffffff;
+  --field: rgba(255, 255, 255, 0.72);
+
+  --ink: #0f1b2d;
+  --muted: #55657a;
+  --line: rgba(15, 27, 45, 0.1);
+  --brand: #0d9488;
+  --brand-2: #6366f1;
   --brand-ink: #ffffff;
-  --brand-soft: #d9f0ec;
-  --good: #15803d;
+  --brand-soft: rgba(13, 148, 136, 0.12);
+  --good: #059669;
   --warn: #b45309;
-  --bad: #b91c1c;
-  --bad-soft: #fde8e8;
-  --warn-soft: #fdf1dc;
-  --info-soft: #e3eefb;
-  /* contribution heatmap: 5 shades of one green (like GitHub) */
-  --h0: #e6ecef;
-  --h1: #b6e3c4;
-  --h2: #6cc58b;
-  --h3: #2fa05b;
-  --h4: #146b3a;
+  --bad: #dc2626;
+  --bad-soft: rgba(239, 68, 68, 0.12);
+  --warn-soft: rgba(245, 158, 11, 0.14);
+  --info-soft: rgba(99, 102, 241, 0.1);
+
+  /* contribution heatmap: 5 shades of one teal */
+  --h0: rgba(15, 27, 45, 0.07);
+  --h1: #99f6e4;
+  --h2: #2dd4bf;
+  --h3: #0d9488;
+  --h4: #115e59;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0e151a;
-    --card: #162027;
-    --ink: #e7eef2;
-    --muted: #94a5b0;
-    --line: #26343d;
+    --bg: #070b18;
+    --aurora-1: rgba(20, 184, 166, 0.22);
+    --aurora-2: rgba(99, 102, 241, 0.26);
+    --aurora-3: rgba(14, 165, 233, 0.14);
+    --aurora-4: rgba(236, 72, 153, 0.1);
+
+    --glass: rgba(255, 255, 255, 0.055);
+    --glass-strong: rgba(22, 30, 52, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 10px 40px -12px rgba(0, 0, 0, 0.6);
+    --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    --card-solid: #121a2e;
+    --field: rgba(255, 255, 255, 0.06);
+
+    --ink: #e8eef8;
+    --muted: #94a3b8;
+    --line: rgba(255, 255, 255, 0.09);
     --brand: #2dd4bf;
-    --brand-ink: #06231f;
-    --brand-soft: #123a36;
-    --good: #4ade80;
+    --brand-2: #818cf8;
+    --brand-ink: #ffffff;
+    --brand-soft: rgba(45, 212, 191, 0.14);
+    --good: #34d399;
     --warn: #fbbf24;
     --bad: #f87171;
-    --bad-soft: #3a1c1f;
-    --warn-soft: #3a2e14;
-    --info-soft: #172c44;
-    --h0: #1f2a31;
-    --h1: #0e4429;
-    --h2: #006d32;
-    --h3: #26a641;
-    --h4: #39d353;
+    --bad-soft: rgba(248, 113, 113, 0.14);
+    --warn-soft: rgba(251, 191, 36, 0.12);
+    --info-soft: rgba(129, 140, 248, 0.14);
+
+    --h0: rgba(255, 255, 255, 0.06);
+    --h1: #134e4a;
+    --h2: #0f766e;
+    --h3: #14b8a6;
+    --h4: #5eead4;
   }
 }
 
 @theme inline {
   --color-bg: var(--bg);
   --color-card: var(--card);
+  --color-card-solid: var(--card-solid);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
   --color-brand-ink: var(--brand-ink);
   --color-brand-soft: var(--brand-soft);
   --color-good: var(--good);
@@ -63,118 +99,231 @@
   --color-bad-soft: var(--bad-soft);
   --color-warn-soft: var(--warn-soft);
   --color-info-soft: var(--info-soft);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-html,
-body {
+html {
   background: var(--bg);
   color: var(--ink);
 }
 body {
   font-family: var(--font-sans);
   -webkit-text-size-adjust: 100%;
-}
-
-/* Small reusable pieces */
-.card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 1rem;
-}
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  min-height: 44px;
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
-  font-weight: 600;
-  background: var(--brand);
-  color: var(--brand-ink);
-  border: 1px solid transparent;
-  cursor: pointer;
-  text-align: center;
-}
-.btn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-.btn-ghost {
   background: transparent;
   color: var(--ink);
-  border-color: var(--line);
+  position: relative;
+  isolation: isolate;
 }
-.btn-danger {
-  background: var(--bad);
-  color: #fff;
+/* Fixed aurora behind everything (pseudo-element, so it also works on iOS where background-attachment: fixed does not). */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -10vmax;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(38vmax 38vmax at 12% 8%, var(--aurora-1), transparent 70%),
+    radial-gradient(42vmax 42vmax at 92% 12%, var(--aurora-2), transparent 70%),
+    radial-gradient(36vmax 36vmax at 70% 92%, var(--aurora-3), transparent 70%),
+    radial-gradient(30vmax 30vmax at 8% 85%, var(--aurora-4), transparent 70%),
+    var(--bg);
 }
-.field {
-  display: block;
-  width: 100%;
-  min-height: 44px;
-  padding: 0.5rem 0.75rem;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  color: var(--ink);
-  font-size: 16px; /* avoids iOS zoom on focus */
+
+::selection {
+  background: color-mix(in srgb, var(--brand) 30%, transparent);
 }
+
+/* Component classes live in a layer so Tailwind utilities (bg-warn-soft, !p-3 …) can override them. */
+@layer components {
+  .glass {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow), var(--glass-highlight);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+  }
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 1.1rem;
+    box-shadow: var(--glass-shadow), var(--glass-highlight);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+  }
+  a.card {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  a.card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--brand) 45%, var(--glass-border));
+    box-shadow: 0 18px 50px -16px color-mix(in srgb, var(--brand-2) 40%, transparent), var(--glass-highlight);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    padding: 0.55rem 1.15rem;
+    border-radius: 12px;
+    font-weight: 600;
+    color: var(--brand-ink);
+    background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 22px -8px color-mix(in srgb, var(--brand-2) 70%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  }
+  .btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+  }
+  .btn:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .btn-ghost {
+    color: var(--ink);
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-highlight);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  .btn-danger {
+    background: linear-gradient(135deg, #ef4444, #db2777);
+  }
+
+  .field {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 0.55rem 0.8rem;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: var(--field);
+    color: var(--ink);
+    font-size: 16px; /* avoids iOS zoom on focus */
+    box-shadow: inset 0 1px 2px rgba(15, 27, 45, 0.06);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .field::placeholder {
+    color: var(--muted);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 18%, transparent);
+  }
+  select.field option {
+    background: var(--card-solid);
+    color: var(--ink);
+  }
+
+  .label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+  .hint {
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+  }
+  .chip-red {
+    background: var(--bad-soft);
+    color: var(--bad);
+    border-color: color-mix(in srgb, var(--bad) 25%, transparent);
+  }
+  .chip-amber {
+    background: var(--warn-soft);
+    color: var(--warn);
+    border-color: color-mix(in srgb, var(--warn) 25%, transparent);
+  }
+  .chip-info {
+    background: var(--info-soft);
+    color: var(--ink);
+    border-color: color-mix(in srgb, var(--brand-2) 20%, transparent);
+  }
+  .chip-good {
+    background: var(--brand-soft);
+    color: var(--good);
+    border-color: color-mix(in srgb, var(--brand) 25%, transparent);
+  }
+
+  /* Gradient text for headline numbers and titles */
+  .text-gradient {
+    background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  /* Selected option tiles (exercise picker, camera view, equipment) */
+  .tile {
+    border: 1px solid var(--glass-border);
+    background: var(--field);
+    border-radius: 16px;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  }
+  .tile-on {
+    border-color: var(--brand);
+    background: var(--brand-soft);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 15%, transparent);
+  }
+
+  /* Heatmap */
+  .heat-cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    outline: 1px solid color-mix(in srgb, var(--ink) 5%, transparent);
+    outline-offset: -1px;
+  }
+  .heat-0 { background: var(--h0); }
+  .heat-1 { background: var(--h1); }
+  .heat-2 { background: var(--h2); }
+  .heat-3 { background: var(--h3); }
+  .heat-4 { background: var(--h4); box-shadow: 0 0 6px -1px color-mix(in srgb, var(--h4) 70%, transparent); }
+  .heat-pad { background: transparent; outline: none; }
+  button.heat-cell:hover,
+  button.heat-cell:focus-visible {
+    outline: 2px solid var(--brand-2);
+    outline-offset: 0;
+  }
+}
+
 .field:focus-visible,
 .btn:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
-.label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-.hint {
-  font-size: 0.8125rem;
-  color: var(--muted);
-}
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.125rem 0.5rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-.chip-red {
-  background: var(--bad-soft);
-  color: var(--bad);
-}
-.chip-amber {
-  background: var(--warn-soft);
-  color: var(--warn);
-}
-.chip-info {
-  background: var(--info-soft);
-  color: var(--ink);
-}
-.chip-good {
-  background: var(--brand-soft);
-  color: var(--good);
-}
 
-/* Heatmap */
-.heat-cell {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-  outline: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
-  outline-offset: -1px;
+/* Fallbacks: no blur support, or the user asked for less transparency / motion */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .card, .glass, .btn-ghost { background: var(--glass-strong); }
 }
-.heat-0 { background: var(--h0); }
-.heat-1 { background: var(--h1); }
-.heat-2 { background: var(--h2); }
-.heat-3 { background: var(--h3); }
-.heat-4 { background: var(--h4); }
-.heat-pad { background: transparent; outline: none; }
+@media (prefers-reduced-transparency: reduce) {
+  .card, .glass, .btn-ghost { background: var(--glass-strong); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
