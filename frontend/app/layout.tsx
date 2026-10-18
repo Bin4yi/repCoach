@@ -13,8 +13,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen antialiased">{children}</body>
+    // suppressHydrationWarning: browser extensions (e.g. Bitdefender adds bis_register / __processed_* attributes)
+    // modify <html>/<body> before React hydrates. This only ignores attribute differences on these two tags.
+    <html lang="en" suppressHydrationWarning>
+      <body className="min-h-screen antialiased" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }

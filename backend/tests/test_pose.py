@@ -53,6 +53,29 @@ def test_rep_counting_on_sine(n):
     assert all(r.start < r.bottom < r.end for r in reps)
 
 
+def test_glitch_at_the_bottom_does_not_split_a_rep():
+    # seen on real kettlebell squat footage: a spike mid-bottom made one rep look like two
+    fps = 30
+    t = np.arange(0, 4 * 3.0 + 2, 1 / fps)
+    sig = 130 + 50 * np.cos(2 * np.pi * t / 3.0)
+    sig[t > 12] = 180
+    i = np.argmin(np.abs(t - 7.5))            # bottom of rep 3
+    sig[i - 6:i + 6] += 40                    # tracking glitch
+    reps = detect_reps(sig, fps, min_prominence=25, min_rep_seconds=0.2)
+    assert len(reps) == 4
+
+
+def test_setup_and_rerack_dips_are_not_reps():
+    # small dips while setting up / re-racking around 5 real reps
+    fps = 30
+    t = np.arange(0, 22, 1 / fps)
+    sig = np.full_like(t, 175.0)
+    for k, (c, depth) in enumerate([(1.5, 50), (5, 110), (8, 110), (11, 105), (14, 110), (17, 108), (20.5, 55)]):
+        sig -= depth * np.exp(-((t - c) / 0.6) ** 2)
+    reps = detect_reps(sig, fps, min_prominence=25, min_rep_seconds=1.0)
+    assert len(reps) == 5
+
+
 def test_wobble_is_not_a_rep():
     fps = 30
     t = np.arange(0, 6, 1 / fps)

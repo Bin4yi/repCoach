@@ -130,7 +130,7 @@ def gen_squat_front(n_reps=5, fps=30.0, knee_cave_m=0.0, depth=0.35, down_s=2.0,
         hip_y = 0.9 + depth * u[i]
         sh_y = hip_y - 0.5
         for side, sgn in (("L", 1.0), ("R", -1.0)):
-            knee_x = 0.145 - knee_cave_m * u[i]
+            knee_x = 0.17 + 0.02 * u[i] - knee_cave_m * u[i]  # healthy squat: knees track slightly outside the ankles
             pts = dict(shoulder=(sgn * 0.20, sh_y), hip=(sgn * 0.12, hip_y), knee=(sgn * knee_x, 1.35),
                        ankle=(sgn * 0.17, GROUND), heel=(sgn * 0.17, GROUND + 0.04), toe=(sgn * 0.19, GROUND + 0.05),
                        elbow=(sgn * 0.24, sh_y + 0.25), wrist=(sgn * 0.26, sh_y + 0.5))

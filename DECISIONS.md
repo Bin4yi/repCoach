@@ -26,6 +26,11 @@ One line of reason each.
 - Overlay: `avc1` codec first, `mp4v` fallback. Overlay shows red skeleton on flagged reps.
 - On this Windows machine the first import of scipy once failed with an "Application Control policy" DLL block, then worked on retry. It is an environment quirk, not a code issue.
 
+## Real-footage validation (Oct 2026)
+- Openly licensed clips (Wikimedia Commons CC BY-SA / public domain, one GitHub sample) are downloaded on demand by `backend/scripts/eval_real_footage.py`; they live in `test-footage/` and are never committed.
+- Findings and fixes: (1) the front-view knee-cave metric (hip-ankle line) gave false positives in deep squats, replaced by the knee-to-ankle separation ratio (flag < 0.80 in the bottom half of a rep); (2) a landmark glitch at the bottom split one rep in two, so valleys are merged unless the signal recovers 50% toward the top; (3) set-up / re-rack dips were counted, so a first/last dip under 60% of the median rep depth is dropped (mid-set shallow reps are kept so fatigue is still flagged).
+- Results: side-view squat 6/6 reps, side-view push-up 6/6, front goblet squat 2/2 with no false knee cave, a front-diagonal push-up correctly asks for a re-shoot. Gap: no clean side-view curl clip found yet; diagonal camera angles remain unreliable (documented limit).
+
 ## Form score weights (0-100, computed in code)
 Start at 100, subtract `weight x (0.4 + 0.6 x share of reps flagged) x severity multiplier` (low 0.6, medium 0.85, high 1.0).
 Weights: shallow_depth 20, knee_cave 20, partial_range 20, excess_forward_lean 15, hip_sag 15, body_swing 15, elbow_drift 12, depth_drops_with_fatigue 10, hips_high 10, no_lockout 10, rushed_eccentric 8.

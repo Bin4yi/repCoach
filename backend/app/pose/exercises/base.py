@@ -14,6 +14,11 @@ from ..types import PoseSequence
 MIN_FLAG_FRACTION = 0.25
 # Share of a rep's range counted as "at the top" when finding rep start/end.
 TOP_BAND = 0.10
+# Two valleys are separate reps only if the signal recovers at least this share of the way back to the top.
+SPLIT_RECOVERY = 0.5
+# With 3+ candidates, a FIRST or LAST dip shallower than this share of the median rep depth is a set-up /
+# re-rack movement. Shallow reps in the middle of a set are kept (they are real reps, maybe fatigued).
+EDGE_MIN_REL_DEPTH = 0.6
 
 
 @dataclass
@@ -64,6 +69,37 @@ def fill_nan(sig: np.ndarray) -> np.ndarray:
     return sig
 
 
+def _clean_valleys(sig: np.ndarray, valleys: list[int]) -> list[int]:
+    """Fix two problems seen on real footage.
+
+    1. A landmark glitch at the bottom of a rep can split it into two valleys. If the signal between two
+       valleys never climbs back at least SPLIT_RECOVERY of the way to the top, they are one rep: keep the deeper.
+    2. Setting up / re-racking makes small dips at the start or end. With 3+ candidates, drop a first/last
+       valley whose depth is under EDGE_MIN_REL_DEPTH of the set's median depth (from the set's top level).
+    """
+    if len(valleys) < 2:
+        return valleys
+    top = float(np.nanpercentile(sig, 95))
+    merged = [valleys[0]]
+    for v in valleys[1:]:
+        prev = merged[-1]
+        low = min(sig[prev], sig[v])
+        between = float(np.max(sig[prev:v + 1]))
+        if between - low < SPLIT_RECOVERY * (top - low):
+            if sig[v] < sig[prev]:
+                merged[-1] = v
+        else:
+            merged.append(v)
+    if len(merged) >= 3:
+        depth = {v: top - sig[v] for v in merged}
+        med = float(np.median(list(depth.values())))
+        while len(merged) >= 3 and depth[merged[0]] < EDGE_MIN_REL_DEPTH * med:
+            merged.pop(0)
+        while len(merged) >= 3 and depth[merged[-1]] < EDGE_MIN_REL_DEPTH * med:
+            merged.pop()
+    return merged
+
+
 def detect_reps(sig: np.ndarray, fps: float, min_prominence: float, min_rep_seconds: float) -> list[Rep]:
     """Find reps as valleys of a signal where HIGH means 'extended / at the top'.
 
@@ -73,6 +109,7 @@ def detect_reps(sig: np.ndarray, fps: float, min_prominence: float, min_rep_seco
     if len(sig) < 5 or np.isnan(sig).all():
         return []
     valleys, _ = find_peaks(-sig, prominence=min_prominence, distance=max(1, int(min_rep_seconds * fps)))
+    valleys = _clean_valleys(sig, list(valleys))
     reps: list[Rep] = []
     for k, b in enumerate(valleys):
         prev_b = valleys[k - 1] if k > 0 else 0

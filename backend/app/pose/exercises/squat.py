@@ -31,7 +31,7 @@ class SquatConfig:
     min_eccentric_s: float = 1.0        # going down faster than this is "rushed"
     beginner_min_eccentric_s: float = 0.8
     # --- knee cave (front view) ---
-    valgus_ratio_limit: float = 0.12    # knee drifts inward by more than 12% of hip width
+    knee_ankle_ratio_min: float = 0.80  # knee width / ankle width below this at the bottom = knees caving in
     # --- fatigue ---
     fatigue_depth_drop_deg: float = 8.0  # last third of reps this much shallower than the first third
     fatigue_min_reps: int = 4
@@ -142,36 +142,32 @@ class SquatAnalyzer(ExerciseAnalyzer):
         sig = fill_nan(height / ref)  # ~1.0 standing, lower when squatting
         reps = detect_reps(sig, seq.fps, c.min_prominence_rel, c.min_rep_seconds)
 
-        hip_w = np.abs(pts[:, 23, 0] - pts[:, 24, 0])
-        mid_x = (pts[:, 23, 0] + pts[:, 24, 0]) / 2
-        valgus = np.zeros((len(sig), 2))
-        for j, (h, k, a) in enumerate(((23, 25, 27), (24, 26, 28))):
-            hx, kx, ax = pts[:, h, 0], pts[:, k, 0], pts[:, a, 0]
-            hy, ky, ay = pts[:, h, 1], pts[:, k, 1], pts[:, a, 1]
-            with np.errstate(invalid="ignore", divide="ignore"):
-                frac = (ky - hy) / (ay - hy)
-                expected = hx + (ax - hx) * frac          # where the knee sits if hip-knee-ankle were straight
-                out_sign = np.sign(hx - mid_x)            # outward direction for this leg
-                valgus[:, j] = ((expected - kx) * out_sign) / hip_w
-        valgus = np.apply_along_axis(fill_nan, 0, valgus)
+        # Knee-to-ankle separation ratio (KASR): knee width / ankle width, measured in the image plane.
+        # ~1 or more = knees over or outside the feet; well below 1 = knees collapsing inward. Unlike a
+        # hip-knee-ankle line, this stays valid in deep squats where the hips drop to knee height.
+        img = seq.img
+        with np.errstate(invalid="ignore", divide="ignore"):
+            kasr = fill_nan(np.abs(img[:, 25, 0] - img[:, 26, 0]) / np.abs(img[:, 27, 0] - img[:, 28, 0]))
 
         res = ExerciseResult(exercise="squat", view="front", side="both", signal_name="hip_height_rel",
                              signal=[round(float(x), 3) for x in sig])
         cave = []
         for r in reps:
             m = common_rep_metrics(sig, r, seq.fps)
-            w = slice(r.start, r.end + 1)
             m["depth_angle"] = None  # not measurable from the front
             m["hip_drop_pct"] = round(100 * (1 - float(sig[r.bottom])), 1)
-            m["knee_valgus_ratio"] = round(float(np.nanmax(valgus[w])), 3)
+            # only the bottom half of the rep counts (knee cave matters under load, not while standing)
+            top = max(r.top_before, r.top_after)
+            low = [i for i in range(r.start, r.end + 1) if sig[i] <= sig[r.bottom] + 0.5 * (top - sig[r.bottom])]
+            m["knee_ankle_ratio"] = round(float(np.nanmin(kasr[low])), 2) if low else None
             res.reps.append(m)
-            if m["knee_valgus_ratio"] > c.valgus_ratio_limit:
+            if m["knee_ankle_ratio"] is not None and m["knee_ankle_ratio"] < c.knee_ankle_ratio_min:
                 cave.append(r.index)
         n = len(reps)
-        vals = {x["rep"]: x["knee_valgus_ratio"] for x in res.reps}
+        vals = {x["rep"]: x["knee_ankle_ratio"] for x in res.reps}
         f = flag_if_enough("knee_cave", cave, n,
-                           f"knees moved inward by {100 * np.mean([vals[i] for i in cave]):.0f}% of hip width "
-                           f"(limit {100 * c.valgus_ratio_limit:.0f}%)") if cave else None
+                           f"knee width was {np.mean([vals[i] for i in cave]):.2f}x ankle width at the bottom "
+                           f"(knees inside the feet; at least {c.knee_ankle_ratio_min:.2f} expected)") if cave else None
         res.flags = [f] if f else []
         res.extras = {"note": "Front view: depth angle is not measured; use side view for depth."}
         return res
