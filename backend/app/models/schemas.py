@@ -11,7 +11,7 @@ Sex = Literal["male", "female", "prefer_not_to_say"]
 Experience = Literal["beginner", "intermediate", "advanced"]
 Goal = Literal["strength", "muscle_gain", "fat_loss", "general_fitness", "rehab_return"]
 Equipment = Literal["bodyweight", "dumbbells", "barbell", "machines", "bands"]
-SessionStatus = Literal["queued", "processing", "needs_reshoot", "ready_for_review", "approved"]
+SessionStatus = Literal["queued", "processing", "needs_reshoot", "ready_for_review", "approved", "failed"]
 
 EXERCISES: tuple[str, ...] = ("squat", "pushup", "bicep_curl")
 EXERCISE_LABELS = {"squat": "Squat", "pushup": "Push-up", "bicep_curl": "Bicep curl"}
@@ -80,6 +80,7 @@ class VideoInputs(BaseModel):
 
 class ApproveIn(BaseModel):
     client_message: str = Field(min_length=1, max_length=2000)
+    progress_message: Optional[str] = Field(default=None, max_length=2000)
     coach_note: Optional[str] = Field(default=None, max_length=2000)
 
 

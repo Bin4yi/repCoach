@@ -63,6 +63,9 @@ def smooth_array(pts: np.ndarray, vis: np.ndarray, fps: float, vis_min: float = 
     win = max(5, int(round(SG_WINDOW_S * fps)) | 1)
     for k in range(n_lm):
         valid = vis[:, k] >= vis_min
+        if valid.all() and not np.isnan(pts[:, k]).any() and len(pts) >= win:
+            out[:, k, :] = savgol_filter(pts[:, k, :], win, SG_ORDER, axis=0)  # fast path: nothing missing
+            continue
         for c in range(d):
             out[:, k, c] = _savgol_nan(_interp_gaps(pts[:, k, c], valid, max_gap), win)
     return out

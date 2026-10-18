@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
+
 from .analysis.metrics import set_metrics
 from .pose.exercises import AnalysisContext, get_analyzer
 from .pose.quality import assess_quality
@@ -13,18 +15,31 @@ NO_REPS_MESSAGE = ("We could not count any reps in this video. Please film the w
                    "with your whole body in view and good light.")
 
 
+def native(obj):
+    """Convert numpy scalars/arrays to plain Python so results can be stored in MongoDB / JSON."""
+    if isinstance(obj, dict):
+        return {k: native(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [native(v) for v in obj]
+    if isinstance(obj, np.generic):
+        return obj.item()
+    if isinstance(obj, np.ndarray):
+        return native(obj.tolist())
+    return obj
+
+
 def analyze_sequence(seq: PoseSequence, exercise: str, view: str, experience_level: str = "intermediate") -> dict:
     """Run quality checks, smoothing and the exercise analyzer on raw landmarks."""
     quality = assess_quality(seq, exercise, view)
     out: dict = {"quality": quality.to_dict(), "reps": [], "flags": [], "set": None, "extras": {}, "side": None}
     if quality.needs_reshoot:
-        return out
+        return native(out)
 
     smooth = smooth_sequence(seq)
     result = get_analyzer(exercise).analyze(smooth, view, AnalysisContext(experience_level))
     if not result.reps:
         out["quality"].update(ok=False, needs_reshoot=True, reason=NO_REPS_MESSAGE)
-        return out
+        return native(out)
 
     flagged_by_rep: dict[int, list[str]] = {}
     for f in result.flags:
@@ -35,7 +50,7 @@ def analyze_sequence(seq: PoseSequence, exercise: str, view: str, experience_lev
 
     out.update(reps=result.reps, flags=result.flags, set=set_metrics(result), extras=result.extras,
                side=result.side, view=result.view, signal=result.signal, fps=round(seq.fps, 2))
-    return out
+    return native(out)
 
 
 def analyze_video(path: str | Path, exercise: str, view: str, experience_level: str = "intermediate",
