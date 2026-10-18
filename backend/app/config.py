@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     max_upload_mb: int = 100
     upload_dir: str = "uploads"
     elevenlabs_api_key: str = ""
-    elevenlabs_voice_id: str = "21m00Tcm4TlvDq8ikWAM"
+    elevenlabs_voice_id: str = "EXAVITQu4vr4xnSDxMaL"  # "Sarah": a default voice usable on the free API plan
     demo_seed_on_start: bool = False
     model_dir: str = str(BACKEND_DIR / "models")
     max_video_seconds: int = 60
