@@ -5,9 +5,12 @@
 AI helper for online personal trainers. Clients film a set; **MediaPipe** finds body points, **Python code** measures and judges form, and **Gemma** (open-weight, run locally with **Ollama**) turns only the numbers into feedback, a progress summary and a next-week plan. The **coach** reviews, edits and approves everything. The AI only drafts.
 
 
-## Run it (5 commands)
+## Run it
+
+Code: https://github.com/Bin4yi/repCoach
 
 ```bash
+git clone https://github.com/Bin4yi/repCoach.git && cd repCoach
 cp .env.example .env                         # set COACH_PASSWORD
 docker compose up --build                    # backend, frontend, mongo, ollama (pulls Gemma)
 docker compose exec backend python -m scripts.seed_demo_data   # 3 demo clients, ~1 year of data
